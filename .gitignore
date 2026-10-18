@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.wav
+.env
+mcp_config.json
+tars_bridge_log.json
+.DS_Store
+Thumbs.db

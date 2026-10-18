@@ -1,0 +1,6 @@
+google-genai>=2.3.0
+mcp>=1.6.0
+pydantic>=2.0.0
+starlette>=0.40.0
+uvicorn>=0.30.0
+websockets>=13.0
