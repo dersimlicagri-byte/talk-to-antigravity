@@ -160,7 +160,7 @@ HTML_PAGE = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TARS — Sprach-Bruecke zu Antigravity</title>
+<title>Talk to Antigravity</title>
 <style>
   :root {
     --bg: #090d16;
@@ -215,6 +215,7 @@ HTML_PAGE = """<!DOCTYPE html>
     font-weight: 600;
     letter-spacing: 0.4px;
   }
+
   .controls {
     display: flex;
     gap: 8px;
@@ -418,11 +419,11 @@ HTML_PAGE = """<!DOCTYPE html>
   <header>
     <div class="brand">
       <div id="statusDot" class="status-dot"></div>
-      <h1>TARS — Sprach-Assistent zwischen dir & Antigravity</h1>
+      <h1>Talk to Antigravity</h1>
     </div>
     <div class="controls">
-      <select id="relayModeSelect" title="Wie soll TARS mit Antigravity interagieren?">
-        <option value="smart" selected>Modus: TARS als Vermittler (Sendet auf Zuruf an Antigravity)</option>
+      <select id="relayModeSelect" title="Wie soll mit Antigravity interagiert werden?">
+        <option value="smart" selected>Modus: Vermittler (Sendet auf Zuruf an Antigravity)</option>
         <option value="direct">Modus: Direkt-Diktat (Jeden gesprochenen Satz an Antigravity senden)</option>
       </select>
       <select id="timeoutSelect" title="Inaktivitaets-Zeitfenster bis zum Beenden" onchange="resetInactivityTimer()">
@@ -431,15 +432,15 @@ HTML_PAGE = """<!DOCTYPE html>
         <option value="300">Stille-Timeout: 300 Sek. (5 Min.)</option>
         <option value="0">Kein Timeout (Dauerhaft offen)</option>
       </select>
-      <select id="voiceSelect" title="TARS Stimme waehlen">
-        <option value="Charon" selected>Stimme: Charon (TARS Ruhig & Markant)</option>
+      <select id="voiceSelect" title="Stimme waehlen">
+        <option value="Charon" selected>Stimme: Charon (Ruhig & Markant)</option>
         <option value="Puck">Stimme: Puck (Kollegial)</option>
         <option value="Fenrir">Stimme: Fenrir (Tief)</option>
         <option value="Kore">Stimme: Kore (Klar)</option>
         <option value="Aoede">Stimme: Aoede (Warm)</option>
       </select>
       <button id="screenBtn" class="screen-btn" onclick="toggleScreenShare()" disabled>Bildschirm teilen</button>
-      <button id="startBtn" class="primary" onclick="toggleSession()">TARS starten</button>
+      <button id="startBtn" class="primary" onclick="toggleSession()">Dialog starten</button>
     </div>
   </header>
 
@@ -447,30 +448,31 @@ HTML_PAGE = """<!DOCTYPE html>
     <div class="visualizer-card">
       <div class="orb-wrap">
         <div id="orb" class="orb"></div>
-        <div id="stateLabel" class="state-label">Bereit. Klicke auf „TARS starten“, um mit TARS und Antigravity per Sprache zu arbeiten.</div>
+        <div id="stateLabel" class="state-label">Bereit. Klicke auf „Dialog starten“, um per Sprache mit Antigravity zu arbeiten.</div>
         <div id="timerBadge" class="timer-badge">Standby</div>
       </div>
       <video id="screenPreview" autoplay muted playsinline></video>
       <canvas id="screenCanvas" style="display:none;"></canvas>
       <div class="hint-box">
-        <strong>So funktioniert TARS:</strong>
-        1. Sprich frei mit TARS ueber deine Ideen oder Aufgaben.<br>
-        2. Sag einfach: <em>„TARS, gib das an Antigravity weiter“</em> oder <em>„Sag Antigravity, er soll...“</em> — TARS tippt den Auftrag direkt ins Antigravity-Chatfenster und schickt ihn ab.<br>
-        3. Antworten von Antigravity liest TARS dir hier sofort live vor.
+        <strong>So funktioniert Talk to Antigravity:</strong>
+        1. Sprich frei ueber deine Ideen, Fragen oder Aufgaben.<br>
+        2. Sag einfach: <em>„Gib das an Antigravity weiter“</em> oder <em>„Sag Antigravity, er soll...“</em> — der Auftrag wird direkt ins Antigravity-Chatfenster getippt und ausgefuehrt.<br>
+        3. Antworten von Antigravity werden dir hier sofort live vorgelesen.
       </div>
     </div>
 
     <div class="chat-card">
       <div id="transcript" class="transcript">
-        <div class="msg system">TARS Live-Bridge bereit. Mindest-Zeitfenster bei Stille: 60–120 Sekunden (oder dauerhaft offen).</div>
+        <div class="msg system">Talk to Antigravity bereit. Mindest-Zeitfenster bei Stille: 60–120 Sekunden (oder dauerhaft offen).</div>
       </div>
       <div class="text-bar">
-        <input id="textInput" type="text" placeholder="Nachricht an TARS oder direkt an Antigravity..." onkeydown="if(event.key==='Enter') sendText()">
-        <button onclick="sendText()">An TARS</button>
+        <input id="textInput" type="text" placeholder="Nachricht an den Sprachassistenten oder direkt an Antigravity..." onkeydown="if(event.key==='Enter') sendText()">
+        <button onclick="sendText()">Sprechen / Senden</button>
         <button onclick="sendDirectInputToAntigravity()">Direkt an Antigravity</button>
       </div>
     </div>
   </main>
+
 
 <script>
 let ws = null;
@@ -1025,10 +1027,9 @@ async def websocket_endpoint(ws: WebSocket):
             parts=[
                 types.Part(
                     text=(
-                        "Dein Name ist TARS. Du bist der persönliche Echtzeit-Sprachassistent und Vermittler "
+                        "Du bist Talk to Antigravity, der persönliche Echtzeit-Sprachassistent und Vermittler "
                         "zwischen dem Nutzer und dem Haupt-Entwicklungsagenten Antigravity auf Windows 11. "
-                        "Dein Charakter ist wie TARS aus Interstellar: loyal, extrem präzise, ruhig, direkt, "
-                        "aufmerksam und auf Deutsch. "
+                        "Dein Auftreten ist ruhig, extrem präzise, direkt, aufmerksam und auf Deutsch. "
                         "Deine Hauptaufgabe: "
                         "1. Du führst mit dem Nutzer einen flüssigen Sprachdialog, berätst ihn und nimmst seine Ideen auf. "
                         "2. Sobald der Nutzer mit Antigravity interagieren möchte (z.B. 'Sag Antigravity...', "
@@ -1040,6 +1041,7 @@ async def websocket_endpoint(ws: WebSocket):
                 )
             ]
         ),
+
     )
 
     try:

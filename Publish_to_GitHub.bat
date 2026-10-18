@@ -1,10 +1,10 @@
 @echo off
 setlocal enabledelayedexpansion
-title TARS — Auf GitHub veroeffentlichen
+title Talk to Antigravity — Auf GitHub veroeffentlichen
 cd /d "%~dp0"
 
 echo ===================================================
-echo     TARS - Auf GitHub veroeffentlichen
+echo     Talk to Antigravity - Auf GitHub veroeffentlichen
 echo ===================================================
 echo.
 
@@ -28,12 +28,12 @@ if not exist ".git" (
 )
 git config user.name >nul 2>&1
 if %ERRORLEVEL% neq 0 (
-    git config user.name "TARS User"
-    git config user.email "tars@local"
+    git config user.name "Dersi"
+    git config user.email "dersi@local"
 )
 
 git add .
-git commit -m "Initial commit: TARS Gemini Live Voice & Antigravity IDE Bridge" >nul 2>&1
+git commit -m "feat: rebrand to Talk to Antigravity" >nul 2>&1
 
 echo [2/4] Pruefe GitHub-Anmeldung...
 gh auth status >nul 2>&1
@@ -44,8 +44,8 @@ if %ERRORLEVEL% neq 0 (
 )
 
 echo.
-echo [3/4] Erstelle Repository 'tars-antigravity-live-bridge' auf GitHub...
-gh repo create tars-antigravity-live-bridge --public --source=. --remote=origin --push --description "TARS - Bidirectional Gemini Live Voice, Screen & Command Bridge for Google Antigravity IDE"
+echo [3/4] Erstelle Repository 'talk-to-antigravity' auf GitHub...
+gh repo create talk-to-antigravity --public --source=. --remote=origin --push --description "Talk to Antigravity — Bidirectional Gemini Live Voice, Screen & Command Bridge for Google Antigravity IDE"
 
 if %ERRORLEVEL% equ 0 (
     echo.
