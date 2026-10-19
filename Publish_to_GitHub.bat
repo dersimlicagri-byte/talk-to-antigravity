@@ -28,9 +28,10 @@ if not exist ".git" (
 )
 git config user.name >nul 2>&1
 if %ERRORLEVEL% neq 0 (
-    git config user.name "Dersi"
-    git config user.email "dersi@local"
+    git config user.name "Contributor"
+    git config user.email "contributor@users.noreply.github.com"
 )
+
 
 git add .
 git commit -m "feat: rebrand to Talk to Antigravity" >nul 2>&1
