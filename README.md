@@ -83,10 +83,11 @@ It acts as an interactive spoken partner that allows you to discuss ideas, share
 
 ### 1. Clone & Install
 ```powershell
-git clone https://github.com/YOUR_USERNAME/talk-to-antigravity.git
+git clone https://github.com/dersimlicagri-byte/talk-to-antigravity.git
 cd talk-to-antigravity
 powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
+
 
 ### 2. Configure MCP in Antigravity
 Add the server to your `~/.gemini/config/mcp_config.json`:
