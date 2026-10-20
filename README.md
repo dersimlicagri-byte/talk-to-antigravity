@@ -5,6 +5,10 @@
 [![Gemini Live API](https://img.shields.io/badge/Model-Gemini%203.1%20Flash%20Live-orange.svg)](https://ai.google.dev)
 [![Antigravity IDE](https://img.shields.io/badge/Platform-Google%20Antigravity%20IDE-purple.svg)](https://antigravity.google)
 
+<p align="center">
+  <img src="demo.gif" alt="Talk to Antigravity Live Demo" width="850">
+</p>
+
 **Talk to Antigravity** is an open-source, bidirectional real-time voice, vision, and command bridge connecting the Google Gemini Multimodal Live API (`gemini-3.1-flash-live-preview`) directly to the **Google Antigravity IDE** on Windows 11.
 
 It acts as an interactive spoken partner that allows you to discuss ideas, share your screen, and dispatch commands straight into your active Antigravity IDE coding session.
