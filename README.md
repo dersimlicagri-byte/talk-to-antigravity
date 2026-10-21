@@ -1,17 +1,29 @@
-# Talk to Antigravity
+# VocalDesk
+
+> **Realtime Voice, Vision & Command Bridge for Google Antigravity & Windows 11**  
+> *„Einsetzbar überall, wo du keine Lust hast zu tippen.“*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-brightgreen.svg)](https://python.org)
 [![Gemini Live API](https://img.shields.io/badge/Model-Gemini%203.1%20Flash%20Live-orange.svg)](https://ai.google.dev)
-[![Antigravity IDE](https://img.shields.io/badge/Platform-Google%20Antigravity%20IDE-purple.svg)](https://antigravity.google)
+[![Platform: Windows 11](https://img.shields.io/badge/Platform-Windows%2011-0078D4.svg)](https://microsoft.com/windows)
+
+---
+
+> [!IMPORTANT]
+> **Legal Disclaimer & Trademark Notice:**  
+> **VocalDesk** is an independent open-source project and is **not affiliated with, sponsored by, or endorsed by Google LLC**.  
+> *Google, Gemini, and Antigravity are trademarks of Google LLC.*
+
+---
 
 <p align="center">
-  <img src="demo.gif" alt="Talk to Antigravity Live Demo" width="850">
+  <img src="demo.gif" alt="VocalDesk Live Demo" width="850">
 </p>
 
-**Talk to Antigravity** is an open-source, bidirectional real-time voice, vision, and command bridge connecting the Google Gemini Multimodal Live API (`gemini-3.1-flash-live-preview`) directly to the **Google Antigravity IDE** on Windows 11.
+**VocalDesk** is a bidirectional real-time voice, desktop vision, and command bridge connecting the Google Gemini Multimodal Live API (`gemini-3.1-flash-live-preview`) directly to the **Google Antigravity IDE** on Windows 11.
 
-It acts as an interactive spoken partner that allows you to discuss ideas, share your screen, and dispatch commands straight into your active Antigravity IDE coding session.
+It acts as an interactive hands-free co-pilot: Discuss architecture ideas, share your monitor in real time, and dispatch prompts or dictations straight into your active Antigravity IDE coding session without touching your keyboard.
 
 ---
 
@@ -26,7 +38,7 @@ It acts as an interactive spoken partner that allows you to discuss ideas, share
                               Speaker |        | Microphone
                                       |        v
                +------------------------------------------------------+
-               |          Talk to Antigravity (Browser UI)            |
+               |             VocalDesk (Local Web UI)                 |
                |             http://127.0.0.1:8765                    |
                +------------------------------------------------------+
                          ^                                    |
@@ -55,53 +67,64 @@ It acts as an interactive spoken partner that allows you to discuss ideas, share
 ## Key Features
 
 1. **Continuous Multi-Turn Voice Streaming:**
-   - Full-duplex WebSocket connection via `google-genai` SDK (`gemini-3.1-flash-live-preview`).
-   - Native 16 kHz audio capture and 24 kHz speech synthesis.
-   - Real-time barge-in: Interrupt speech playback mid-sentence to speak.
+   - Full-duplex WebSocket connection via official `google-genai` SDK.
+   - Native 16 kHz audio capture and 24 kHz speech synthesis with zero-lag response.
+   - Real-time barge-in: Interrupt speech playback mid-sentence naturally.
 
-2. **Configurable Silence Inactivity Window:**
-   - Does not prematurely close during thinking pauses.
-   - Configurable timeout: 60s, 120s (default), 300s, or unlimited / permanently open.
+2. **Smart Inactivity Window (Silence Protection):**
+   - Does not disconnect during thinking pauses.
+   - Configurable timeout: 60s, 120s (default), 300s, or unlimited.
 
 3. **Live Desktop Screen Sharing:**
    - One-click screen sharing (`getDisplayMedia`) streaming scaled 1024px JPEG frames directly to Gemini Live every 1.5 seconds.
-   - Allows the assistant to see your code, compiler errors, and browser layout in real time.
+   - The assistant inspects code diffs, UI layouts, and terminal errors live.
 
-4. **Direct Antigravity IDE Window Injection:**
-   - Automatically invokes its `send_to_antigravity(prompt)` tool when you say *"Pass this to Antigravity"* or *"Tell Antigravity to build..."*.
-   - Uses native Win32 API calls (`SetForegroundWindow` with dummy `ALT` foreground-lock bypass, `Ctrl+V`, `Enter`) to type and execute the prompt in your Antigravity chat input.
-   - Toggle between **Intermediary Mode** (relays on voice trigger) and **Direct Dictation Mode** (transcribes every spoken sentence straight into Antigravity).
+4. **Direct Win32 Window Injection:**
+   - Automatically invokes `send_to_antigravity(prompt)` on triggers like *"Gib das an Antigravity weiter"* or *"Tippe das für mich ein"*.
+   - Uses native Win32 API calls (`SetForegroundWindow` with `ALT` lock bypass, clipboard injection, `Enter`).
+   - Supports **Intermediary Mode** (smart relay) and **Direct Dictation Mode** (transcribes directly to target window).
 
 5. **Reverse Audio Bridge:**
-   - Antigravity's MCP `speak` tool automatically pushes completed agent answers back into the active live session via `POST /api/tars/announce`.
-   - The assistant recites Antigravity's response through your speakers in real time.
+   - Antigravity's MCP `speak` tool pushes completed agent answers back into the active session via `POST /api/tars/announce`.
+   - The assistant reads Antigravity's answers aloud through your speakers.
 
 ---
 
-## Installation & Setup
+## Editions
+
+| Feature | Community Edition (Open Source) | Pro Edition (Precompiled Standalone) |
+| :--- | :---: | :---: |
+| **Full Source Code** | Yes (MIT) | Precompiled Standalone `.exe` |
+| **Python / Environment Setup** | Required | **None (Zero-Install)** |
+| **Windows System-Tray Integration** | Manual script | **Included** |
+| **Auto-Start & Background Updates** | No | **Included** |
+| **Pricing** | Free (Bring Your Own Key) | Commercial License |
+
+---
+
+## Quick Start (Community Edition)
 
 ### Prerequisites
 * Windows 10 or Windows 11
 * Python 3.10 or newer
 * Google AI Studio API Key ([aistudio.google.com](https://aistudio.google.com))
 
-### 1. Clone & Install
+### 1. Installation
 ```powershell
-git clone https://github.com/dersimlicagri-byte/talk-to-antigravity.git
-cd talk-to-antigravity
+git clone https://github.com/dersimlicagri-byte/talk-to-antigravity.git vocaldesk
+cd vocaldesk
 powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
-
 
 ### 2. Configure MCP in Antigravity
 Add the server to your `~/.gemini/config/mcp_config.json`:
 ```json
 {
   "mcpServers": {
-    "google-tts": {
-      "command": "C:\\path\\to\\talk-to-antigravity\\.venv\\Scripts\\python.exe",
+    "vocaldesk": {
+      "command": "C:\\path\\to\\vocaldesk\\.venv\\Scripts\\python.exe",
       "args": [
-        "C:\\path\\to\\talk-to-antigravity\\server.py"
+        "C:\\path\\to\\vocaldesk\\server.py"
       ],
       "env": {
         "GEMINI_API_KEY": "YOUR_AI_STUDIO_API_KEY"
@@ -111,14 +134,15 @@ Add the server to your `~/.gemini/config/mcp_config.json`:
 }
 ```
 
-### 3. Start Talk to Antigravity
-Double-click `start_tars.bat` (or `Talk_to_Antigravity.bat`) or run:
+### 3. Launch
 ```powershell
 .\start_tars.bat
 ```
-The interface opens automatically at [http://127.0.0.1:8765](http://127.0.0.1:8765).
+Open [http://127.0.0.1:8765](http://127.0.0.1:8765) in any modern browser.
 
 ---
 
-## License
-Released under the [MIT License](LICENSE).
+## License & Copyright
+
+- **Community Edition:** Licensed under the [MIT License](LICENSE).
+- **Trademark Notice:** *Antigravity, Gemini, and Google are trademarks of Google LLC.* VocalDesk is an independent project.

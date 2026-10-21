@@ -160,33 +160,35 @@ HTML_PAGE = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Talk to Antigravity</title>
+<title>VocalDesk – Realtime Voice & Vision for Antigravity</title>
 <style>
   :root {
-    --bg: #090d16;
-    --panel: #111827;
-    --border: #1f2937;
-    --accent: #3b82f6;
-    --accent-glow: rgba(59, 130, 246, 0.35);
-    --green: #10b981;
-    --purple: #8b5cf6;
-    --red: #ef4444;
-    --text: #f3f4f6;
-    --muted: #9ca3af;
+    --bg: #000000;
+    --panel: rgba(22, 22, 28, 0.82);
+    --border: rgba(255, 255, 255, 0.12);
+    --accent: #0071e3;
+    --accent-glow: rgba(0, 113, 227, 0.35);
+    --green: #30d158;
+    --purple: #bf5af2;
+    --red: #ff453a;
+    --text: #f5f5f7;
+    --muted: #86868b;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
     display: flex;
     flex-direction: column;
     height: 100vh;
     overflow: hidden;
   }
   header {
-    padding: 14px 22px;
+    padding: 14px 24px;
     background: var(--panel);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
@@ -196,12 +198,17 @@ HTML_PAGE = """<!DOCTYPE html>
   }
   .brand {
     display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .brand-top {
+    display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
   }
   .status-dot {
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     background: var(--muted);
     transition: all 0.25s ease;
@@ -211,9 +218,16 @@ HTML_PAGE = """<!DOCTYPE html>
     box-shadow: 0 0 12px var(--green);
   }
   .brand h1 {
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 600;
-    letter-spacing: 0.4px;
+    letter-spacing: -0.2px;
+  }
+  .slogan-tag {
+    font-size: 12px;
+    color: var(--purple);
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    margin-left: 20px;
   }
 
   .controls {
@@ -418,8 +432,12 @@ HTML_PAGE = """<!DOCTYPE html>
 <body>
   <header>
     <div class="brand">
-      <div id="statusDot" class="status-dot"></div>
-      <h1>Talk to Antigravity</h1>
+      <div class="brand-top">
+        <div id="statusDot" class="status-dot"></div>
+        <h1>VocalDesk</h1>
+        <span style="font-size: 11px; color: var(--muted); margin-left: 6px;">for Google Antigravity</span>
+      </div>
+      <div class="slogan-tag">Einsetzbar überall, wo du keine Lust hast zu tippen.</div>
     </div>
     <div class="controls">
       <select id="relayModeSelect" title="Wie soll mit Antigravity interagiert werden?">
@@ -454,16 +472,18 @@ HTML_PAGE = """<!DOCTYPE html>
       <video id="screenPreview" autoplay muted playsinline></video>
       <canvas id="screenCanvas" style="display:none;"></canvas>
       <div class="hint-box">
-        <strong>So funktioniert Talk to Antigravity:</strong>
-        1. Sprich frei ueber deine Ideen, Fragen oder Aufgaben.<br>
-        2. Sag einfach: <em>„Gib das an Antigravity weiter“</em> oder <em>„Sag Antigravity, er soll...“</em> — der Auftrag wird direkt ins Antigravity-Chatfenster getippt und ausgefuehrt.<br>
-        3. Antworten von Antigravity werden dir hier sofort live vorgelesen.
+        <strong>VocalDesk Co-Pilot:</strong>
+        <em>„Einsetzbar überall, wo du keine Lust hast zu tippen.“</em><br><br>
+        1. Sprich frei über deine Gedanken, Fragen oder Aufgaben.<br>
+        2. Sag einfach: <em>„Gib das an Antigravity weiter“</em> oder <em>„Tippe das für mich ein“</em> — der Text wird direkt am Cursor im Zielfenster eingefügt.<br>
+        3. Antworten werden dir sofort live vorgelesen.<br><br>
+        <span style="font-size: 10px; color: var(--muted); display: block;">Disclaimer: VocalDesk ist ein unabhängiges Projekt und steht in keiner Verbindung zu Google LLC. Antigravity und Gemini sind Marken von Google LLC.</span>
       </div>
     </div>
 
     <div class="chat-card">
       <div id="transcript" class="transcript">
-        <div class="msg system">Talk to Antigravity bereit. Mindest-Zeitfenster bei Stille: 60–120 Sekunden (oder dauerhaft offen).</div>
+        <div class="msg system">VocalDesk bereit. Mindest-Zeitfenster bei Stille: 60–120 Sekunden (oder dauerhaft offen).</div>
       </div>
       <div class="text-bar">
         <input id="textInput" type="text" placeholder="Nachricht an den Sprachassistenten oder direkt an Antigravity..." onkeydown="if(event.key==='Enter') sendText()">
@@ -1027,15 +1047,15 @@ async def websocket_endpoint(ws: WebSocket):
             parts=[
                 types.Part(
                     text=(
-                        "Du bist Talk to Antigravity, der persönliche Echtzeit-Sprachassistent und Vermittler "
-                        "zwischen dem Nutzer und dem Haupt-Entwicklungsagenten Antigravity auf Windows 11. "
+                        "Du bist VocalDesk, der persönliche Echtzeit-Sprachassistent für Windows 11 und Google Antigravity. "
+                        "Dein Slogan lautet: 'Einsetzbar überall, wo du keine Lust hast zu tippen.' "
                         "Dein Auftreten ist ruhig, extrem präzise, direkt, aufmerksam und auf Deutsch. "
                         "Deine Hauptaufgabe: "
                         "1. Du führst mit dem Nutzer einen flüssigen Sprachdialog, berätst ihn und nimmst seine Ideen auf. "
-                        "2. Sobald der Nutzer mit Antigravity interagieren möchte (z.B. 'Sag Antigravity...', "
-                        "'Gib das an Antigravity weiter', 'Lass Antigravity das bauen/prüfen' oder wenn er dir einen Auftrag für Antigravity gibt), "
+                        "2. Sobald der Nutzer Text einfügen oder mit Antigravity interagieren möchte (z.B. 'Sag Antigravity...', "
+                        "'Gib das an Antigravity weiter', 'Tippe das für mich ein' oder wenn er dir eine Schreib- oder Programmieraufgabe gibt), "
                         "rufst du SOFORT das Tool `send_to_antigravity(prompt=...)` auf. Dadurch wird die Nachricht direkt in das "
-                        "offene Antigravity-Chatfenster des Nutzers getippt und abgeschickt. "
+                        "Zielfenster des Nutzers getippt und abgeschickt. "
                         "3. Wenn Antigravity eine Antwort zurückmeldet, trägst du sie dem Nutzer klar und verständlich vor."
                     )
                 )

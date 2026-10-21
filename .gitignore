@@ -1,8 +1,17 @@
+build/
+dist/
+*.spec
+render_*.py
+generate_*.py
+create_ambient_pad.py
+Publish_to_GitHub.ps1
 .venv/
 __pycache__/
 *.py[cod]
 *$py.class
 *.wav
+*.mp4
+*.mov
 .env
 mcp_config.json
 tars_bridge_log.json
